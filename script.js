@@ -176,6 +176,7 @@ let next = document.querySelector('.next');
 let question = document.querySelector('.question');
 let answers = document.querySelectorAll('.list-group-item');
 let index = 0;
+let pkt = 0;
 
 function setQuestion(index) {
     question.innerHTML = preQuestions[index].question;
@@ -187,8 +188,23 @@ function setQuestion(index) {
 }
 
 setQuestion(index);
+listner(index);
 
-next.addEventListener('click', function () {
+next.addEventListener('click', nextQuestion());
+
+function listner(index) {
+    for (let i = 0; i < answers.length; i++) {
+        answers[i].addEventListener('click', function (event) {
+            if (preQuestions[index].correct_answer === event.target.valueOf().innerHTML)
+                pkt++;
+
+            console.log("pytanie: " + index + " punkty: " + pkt);
+            nextQuestion();
+        });
+    }
+}
+
+function nextQuestion() {
     index++;
     setQuestion(index);
-});
+}
