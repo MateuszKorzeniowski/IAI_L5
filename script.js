@@ -171,28 +171,40 @@ let preQuestions =
             ]
         }];
 
-let next = document.querySelector('.next');
+var next = document.querySelector('.next');
 
 let question = document.querySelector('.question');
 let answers = document.querySelectorAll('.list-group-item');
-let index = 0;
-let pkt = 0;
+let points = document.querySelector('.points');
+let nbQuestion = document.querySelector('.nb-question');
 
-function setQuestion(index) {
+var index = 0;
+var pkt = 0;
+
+function setQuestion() {
     question.innerHTML = preQuestions[index].question;
 
-    answers[0].innerHTML = preQuestions[index].answers[0];
-    answers[1].innerHTML = preQuestions[index].answers[1];
-    answers[2].innerHTML = preQuestions[index].answers[2];
-    answers[3].innerHTML = preQuestions[index].answers[3];
+    if(preQuestions[index].type==="multiple")
+    {
+        answers[0].innerHTML = preQuestions[index].answers[0];
+        answers[1].innerHTML = preQuestions[index].answers[1];
+        answers[2].innerHTML = preQuestions[index].answers[2];
+        answers[3].innerHTML = preQuestions[index].answers[3];   
+    }
+    else if(preQuestions[index].type==="boolean")
+    {
+        answers[0].innerHTML = preQuestions[index].answers[0];
+        answers[1].innerHTML = preQuestions[index].answers[1]; 
+        answers[2].innerHTML = "-------------------";
+        answers[3].innerHTML = "-------------------";  
+    }
+    
 }
 
 setQuestion(index);
-listner(index);
+listner();
 
-next.addEventListener('click', nextQuestion());
-
-function listner(index) {
+function listner() {
     for (let i = 0; i < answers.length; i++) {
         answers[i].addEventListener('click', function (event) {
             if (preQuestions[index].correct_answer === event.target.valueOf().innerHTML)
@@ -204,7 +216,26 @@ function listner(index) {
     }
 }
 
-function nextQuestion() {
-    index++;
+next.addEventListener('click', function () {
+    if(index >= preQuestions.length-1) goIndex(); 
+    else index++;
     setQuestion(index);
+    score();
+});
+
+function nextQuestion() {
+    if(index >= preQuestions.length-1) goIndex(); 
+    else index++;
+    setQuestion(index);
+    score();
+}
+
+function score(){
+    points.innerHTML="Punkty: "+pkt;
+    nbQuestion.innerHTML="Pytanie: "+(index+1) +"/"+(preQuestions.length);
+}
+
+function goIndex()
+{
+    location.href = 'index.html';
 }
